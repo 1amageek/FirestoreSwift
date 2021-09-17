@@ -23,8 +23,8 @@ let package = Package(
                 .product(name: "FirebaseFirestore", package: "Firebase")
             ],
             exclude: [
-                "LICENSE",
-                "METADATA"
+                "../../Sources/FirestoreSwift/FirestoreEncoder/LICENSE",
+                "../../Sources/FirestoreSwift/FirestoreEncoder/METADATA"
             ]),
         .testTarget(
             name: "FirestoreSwiftTests",
