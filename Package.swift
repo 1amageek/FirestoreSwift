@@ -21,6 +21,10 @@ let package = Package(
             dependencies: [
                 "DocumentID",
                 .product(name: "FirebaseFirestore", package: "Firebase")
+            ],
+            exclude: [
+                "LICENSE",
+                "METADATA"
             ]),
         .testTarget(
             name: "FirestoreSwiftTests",
