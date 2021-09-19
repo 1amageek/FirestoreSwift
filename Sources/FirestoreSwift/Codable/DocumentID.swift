@@ -61,25 +61,6 @@ internal protocol DocumentIDProtocol {
     init(from documentReference: DocumentReference) throws
 }
 
-
-extension DocumentID: Codable {
-
-
-    // MARK: - `Codable` implementation.
-
-    public init(from decoder: Decoder) throws {
-        throw FirestoreDecodingError.decodingIsNotSupported(
-            "DocumentID values can only be decoded with Firestore.Decoder"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        throw FirestoreEncodingError.encodingIsNotSupported(
-            "DocumentID values can only be encoded with Firestore.Encoder"
-        )
-    }
-}
-
 extension DocumentID: DocumentIDProtocol where Value: DocumentIDWrappable {
     // MARK: - `DocumentIDProtocol` conformance
 
