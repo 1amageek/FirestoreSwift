@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 extension Query {
 
-    func updates(includeMetadataChanges: Bool = false) -> AsyncThrowingStream<QuerySnapshot, Error> {
+    public func updates(includeMetadataChanges: Bool = false) -> AsyncThrowingStream<QuerySnapshot, Error> {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
@@ -25,7 +25,7 @@ extension Query {
         }
     }
 
-    func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
