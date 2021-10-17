@@ -14,10 +14,14 @@ extension DocumentReference {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                     return
                 }
-                continuation.yield(documentSnapshot)
+                DispatchQueue.main.async {
+                    continuation.yield(documentSnapshot)
+                }
             }
             continuation.onTermination = { @Sendable _ in
                 listener.remove()
@@ -29,14 +33,20 @@ extension DocumentReference {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                     return
                 }
                 do {
                     let document = try documentSnapshot?.data(as: type)
-                    continuation.yield(document)
+                    DispatchQueue.main.async {
+                        continuation.yield(document)
+                    }
                 } catch {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                 }
             }
             continuation.onTermination = { @Sendable _ in

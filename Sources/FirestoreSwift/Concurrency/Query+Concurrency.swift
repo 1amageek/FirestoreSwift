@@ -14,10 +14,14 @@ extension Query {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                     return
                 }
-                continuation.yield(querySnapshot!)
+                DispatchQueue.main.async {
+                    continuation.yield(querySnapshot!)
+                }
             }
             continuation.onTermination = { @Sendable _ in
                 listener.remove()
@@ -29,16 +33,22 @@ extension Query {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                     return
                 }
                 do {
                     let documents: [T] = try querySnapshot?.documents.compactMap({ queryDocumentSnapshot in
                         return try queryDocumentSnapshot.data(as: type)
                     }) ?? []
-                    continuation.yield(documents)
+                    DispatchQueue.main.async {
+                        continuation.yield(documents)
+                    }
                 } catch {
-                    continuation.finish(throwing: error)
+                    DispatchQueue.main.async {
+                        continuation.finish(throwing: error)
+                    }
                 }
             }
             continuation.onTermination = { @Sendable _ in
