@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "FirestoreSwift",
-    platforms: [.iOS(.v14), .macOS(.v11), .watchOS(.v7)],
+    platforms: [.iOS(.v15), .macOS(.v12), .watchOS(.v8)],
     products: [
         .library(
             name: "FirestoreSwift",
