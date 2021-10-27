@@ -37,7 +37,7 @@ extension DocumentReference {
                     continuation.yield(document)
                 } catch {
                     print(#function, #line, error)
-                    continuation.yield([])
+                    continuation.yield(nil)
                 }
             }
             continuation.onTermination = { @Sendable _ in
