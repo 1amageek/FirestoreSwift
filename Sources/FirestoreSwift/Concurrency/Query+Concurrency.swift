@@ -25,7 +25,7 @@ extension Query {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<([T], QuerySnapshot), Error> where T: Decodable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
@@ -36,10 +36,10 @@ extension Query {
                     let documents: [T] = try querySnapshot?.documents.compactMap({ queryDocumentSnapshot in
                         return try queryDocumentSnapshot.data(as: type)
                     }) ?? []
-                    continuation.yield(documents)
+                    continuation.yield((documents, querySnapshot!))
                 } catch {
                     print(#function, #line, error)
-                    continuation.yield([])
+                    continuation.yield(([], querySnapshot!))
                 }
             }
             continuation.onTermination = { @Sendable _ in

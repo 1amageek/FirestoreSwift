@@ -25,7 +25,7 @@ extension DocumentReference {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<T?, Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<(T?, DocumentSnapshot?), Error> where T: Decodable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {
@@ -34,10 +34,10 @@ extension DocumentReference {
                 }
                 do {
                     let document = try documentSnapshot?.data(as: type)
-                    continuation.yield(document)
+                    continuation.yield((document, documentSnapshot))
                 } catch {
                     print(#function, #line, error)
-                    continuation.yield(nil)
+                    continuation.yield((nil, nil))
                 }
             }
             continuation.onTermination = { @Sendable _ in
