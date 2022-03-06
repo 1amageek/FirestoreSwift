@@ -59,6 +59,8 @@ extension DocumentReference: DocumentIDWrappable {
 internal protocol DocumentIDProtocol {
     /// Initializes the DocumentID from a DocumentReference.
     init(from documentReference: DocumentReference) throws
+
+    init(from id: String) throws
 }
 
 extension DocumentID: DocumentIDProtocol where Value: DocumentIDWrappable {
@@ -68,5 +70,8 @@ extension DocumentID: DocumentIDProtocol where Value: DocumentIDWrappable {
         let value = try Value.wrap(documentReference)
         self.init(wrappedValue: value)
     }
-}
 
+    public init(from id: String) throws {
+        self.init(wrappedValue: id  as! Value)
+    }
+}

@@ -30,4 +30,27 @@ final class FirestoreSwiftTests: XCTestCase {
 //        Firestore.Decoder().decode(<#T##T#>, from: <#T##[String : Any]#>)
 
     }
+
+    func testOptional() throws {
+
+        struct OptionalData: Codable {
+            var a: String?
+        }
+
+        let encoded = try? Firestore.Encoder().encode(OptionalData(a: nil))
+
+        let data = try? Firestore.Decoder().decode(OptionalData.self, from: encoded!)
+
+    }
+
+    func testIncludeID() throws {
+
+        struct Model: Identifiable, Codable {
+            @DocumentID var id: String
+        }
+
+        let data = ["id": "0000"]
+
+        let decoded = try? Firestore.Decoder().decode(Model.self, from: data)
+    }
 }
