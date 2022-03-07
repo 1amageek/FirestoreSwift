@@ -52,5 +52,14 @@ final class FirestoreSwiftTests: XCTestCase {
         let data = ["id": "0000"]
 
         let decoded = try? Firestore.Decoder().decode(Model.self, from: data)
+        let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
+        print("!!", jsonData)
+        do {
+            let json = try JSONDecoder().decode(Model.self, from: jsonData)
+            print("!!", json)
+        } catch {
+            print(error)
+        }
+
     }
 }

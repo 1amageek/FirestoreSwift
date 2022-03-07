@@ -338,9 +338,7 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
 #if compiler(>=5.1)
         if let type = type as? DocumentIDProtocol.Type {
             
-            if decoder.userInfo.isEmpty,
-               contains(key),
-               let value = container[key.stringValue] as? String {
+            if contains(key), let value = container[key.stringValue] as? String {
                 return try type.init(from: value) as! T
             } else {
                 let docRef = decoder.userInfo[
