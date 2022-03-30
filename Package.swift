@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "DocumentID", url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "8.12.0"))
+        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "8.14.0"))
     ],
     targets: [
         .target(

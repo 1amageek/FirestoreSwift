@@ -60,6 +60,5 @@ final class FirestoreSwiftTests: XCTestCase {
         } catch {
             print(error)
         }
-
     }
 }
