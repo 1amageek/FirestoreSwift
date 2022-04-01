@@ -25,6 +25,29 @@ extension Query {
         }
     }
 
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable {
+        AsyncThrowingStream { continuation in
+            let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
+                if let error = error {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                do {
+                    let documents: [T] = try querySnapshot?.documents.compactMap({ queryDocumentSnapshot in
+                        return try queryDocumentSnapshot.data(as: type)
+                    }) ?? []
+                    continuation.yield(documents)
+                } catch {
+                    print(#function, #line, error)
+                    continuation.yield([])
+                }
+            }
+            continuation.onTermination = { @Sendable _ in
+                listener.remove()
+            }
+        }
+    }
+
     public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<([T], QuerySnapshot), Error> where T: Decodable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
