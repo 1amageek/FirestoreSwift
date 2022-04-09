@@ -15,6 +15,7 @@
 
 import FirebaseFirestore
 import Foundation
+import DocumentID
 
 extension Firestore {
     public struct Encoder {
@@ -269,7 +270,10 @@ private struct _FirestoreKeyedEncodingContainer<K: CodingKey>: KeyedEncodingCont
     public mutating func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
 #if compiler(>=5.1)
         // `DocumentID`-annotated fields are ignored during encoding.
-        if T.self is DocumentIDProtocol.Type {
+        if T.self is DocumentIDProtocol.Type, let value = value as? DocumentID<String> {
+            if !codingPath.isEmpty {
+                container[key.stringValue] = encoder.box(value.wrappedValue)
+            }
             return
         }
 #endif // compiler(>=5.1)
