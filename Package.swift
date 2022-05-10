@@ -12,15 +12,15 @@ let package = Package(
             targets: ["FirestoreSwift"]),
     ],
     dependencies: [
-        .package(name: "DocumentID", url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
-        .package(name: "Firebase", url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "8.14.0"))
+        .package(url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "9.0.0"))
     ],
     targets: [
         .target(
             name: "FirestoreSwift",
             dependencies: [
-                "DocumentID",
-                .product(name: "FirebaseFirestore", package: "Firebase")
+                .product(name: "DocumentID", package: "DocumentID"),
+                .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
             ],
             exclude: [
                 "../../Sources/FirestoreSwift/FirestoreEncoder/LICENSE",
