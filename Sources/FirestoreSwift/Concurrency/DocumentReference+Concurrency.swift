@@ -10,6 +10,19 @@ import FirebaseFirestore
 
 extension DocumentReference {
 
+    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> T? where T: Decodable {
+        try await withCheckedThrowingContinuation { continuation in
+            self.getDocument(source: source) { documentSnapshot, error in
+                do {
+                    let document: T? = try documentSnapshot?.data(as: type)
+                    continuation.resume(returning: document)
+                } catch {
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     public func updates(includeMetadataChanges: Bool = false) -> AsyncThrowingStream<DocumentSnapshot?, Error> {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in

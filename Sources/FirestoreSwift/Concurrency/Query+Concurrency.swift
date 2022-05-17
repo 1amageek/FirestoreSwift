@@ -9,6 +9,26 @@ import Foundation
 import FirebaseFirestore
 
 extension Query {
+    
+    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> [T]? where T: Decodable {
+        try await withCheckedThrowingContinuation { continuation in
+            self.getDocuments(source: source) { querySnapshot, error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                do {
+                    let documents: [T] = try querySnapshot?.documents.compactMap({ queryDocumentSnapshot in
+                        return try queryDocumentSnapshot.data(as: type)
+                    }) ?? []
+                    continuation.resume(returning: documents)
+                } catch {
+                    print(#function, #line, error)
+                    continuation.resume(returning: [])
+                }
+            }
+        }
+    }
 
     public func updates(includeMetadataChanges: Bool = false) -> AsyncThrowingStream<QuerySnapshot, Error> {
         AsyncThrowingStream { continuation in

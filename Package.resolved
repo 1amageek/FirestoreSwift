@@ -24,7 +24,7 @@
         "repositoryURL": "git@github.com:1amageek/DocumentID.git",
         "state": {
           "branch": "main",
-          "revision": "beb1016e81032e74aeb6a95e70d678e980493198",
+          "revision": "8f1581d0063379ef37766f23b06845cf2495cdc6",
           "version": null
         }
       },
@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/google/GoogleDataTransport.git",
         "state": {
           "branch": null,
-          "revision": "15ccdfd25ac55b9239b82809531ff26605e7556e",
-          "version": "9.1.2"
+          "revision": "b905c49326b72211531ed9d7baa02d724828a8dc",
+          "version": "9.1.4"
         }
       },
       {

@@ -20,6 +20,7 @@ let package = Package(
             name: "FirestoreSwift",
             dependencies: [
                 .product(name: "DocumentID", package: "DocumentID"),
+                .product(name: "FirestoreImitation", package: "DocumentID"),
                 .product(name: "FirebaseFirestore", package: "firebase-ios-sdk")
             ],
             exclude: [
