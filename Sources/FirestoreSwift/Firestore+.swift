@@ -9,6 +9,16 @@ import Foundation
 import FirebaseFirestore
 import FirestoreImitation
 
+extension Source {
+    var rawValue: FirestoreSource {
+        switch self {
+            case .default: return .default
+            case .server: return .server
+            case .cache: return .cache
+        }
+    }
+}
+
 extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
 
     public func updates<T>(_ query: FirestoreImitation.Query, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
@@ -24,12 +34,24 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     }
 
     public func get<T>(_ query: FirestoreImitation.Query, source: Source, type: T.Type) async throws -> [T]? where T : Decodable {
-        return nil
+        try await withCheckedThrowingContinuation { continuation in
+            collection(query.path).getDocuments(source: source.rawValue) { querySnapshot, error in
+                do {
+                    let documents: [T] = try querySnapshot?.documents.compactMap({ queryDocumentSnapshot in
+                        return try queryDocumentSnapshot.data(as: type)
+                    }) ?? []
+                    continuation.resume(returning: documents)
+                } catch {
+                    print(#function, #line, error)
+                    continuation.resume(returning: [])
+                }
+            }
+        }
     }
 
     public func get<T>(_ reference: FirestoreImitation.DocumentReference, source: Source, type: T.Type) async throws -> T? where T : Decodable {
         try await withCheckedThrowingContinuation { continuation in
-            document(reference.path).getDocument { snapshot, error in
+            document(reference.path).getDocument(source: source.rawValue) { snapshot, error in
                 do {
                     let document: T? = try snapshot?.data(as: type)
                     continuation.resume(returning: document)
@@ -45,10 +67,10 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     }
 
     public func update<T>(before: T?, after: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
-
+        try document(reference.path).setData(from: after, merge: true)
     }
 
     public func delete<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
-
+        try await document(reference.path).delete()
     }
 }
