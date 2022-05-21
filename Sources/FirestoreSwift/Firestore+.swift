@@ -63,14 +63,54 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     }
 
     public func create<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
-        try document(reference.path).setData(from: data)
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            do {
+                try document(reference.path).setData(from: data, merge: true) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume()
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
     }
 
     public func update<T>(before: T?, after: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
-        try document(reference.path).setData(from: after, merge: true)
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            do {
+                try document(reference.path).setData(from: after, merge: true) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume()
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
     }
 
-    public func delete<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
+    public func update<T>(data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            do {
+                try document(reference.path).setData(from: data, merge: true) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume()
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    public func delete(reference: FirestoreImitation.DocumentReference) async throws {
         try await document(reference.path).delete()
     }
 }

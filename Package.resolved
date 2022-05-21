@@ -24,7 +24,7 @@
         "repositoryURL": "git@github.com:1amageek/DocumentID.git",
         "state": {
           "branch": "main",
-          "revision": "7dcc0bb835fd28dcb95bfd9a9267a2b9e32d5752",
+          "revision": "26a94ec3a5182377b9771fe183a5568a37512e84",
           "version": null
         }
       },
@@ -69,8 +69,8 @@
         "repositoryURL": "https://github.com/grpc/grpc-ios.git",
         "state": {
           "branch": null,
-          "revision": "87cbe43709371123e95ca10d6956938741388af7",
-          "version": "1.44.1-grpc"
+          "revision": "2af4f6e9c2b18beae228f50b1198c641be859d2b",
+          "version": "1.44.2-grpc"
         }
       },
       {
