@@ -12,7 +12,10 @@ let package = Package(
             targets: ["FirestoreSwift"]),
         .library(
             name: "FunctionsSwift",
-            targets: ["FunctionsSwift"])
+            targets: ["FunctionsSwift"]),
+        .library(
+            name: "AnalyticsSwift",
+            targets: ["AnalyticsSwift"]),
     ],
     dependencies: [
         .package(url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
@@ -35,6 +38,16 @@ let package = Package(
             dependencies: [
                 .product(name: "FunctionsImitation", package: "DocumentID"),
                 .product(name: "FirebaseFunctions", package: "firebase-ios-sdk")
+            ],
+            exclude: [
+                "../../Sources/FirestoreSwift/FirestoreEncoder/LICENSE",
+                "../../Sources/FirestoreSwift/FirestoreEncoder/METADATA"
+            ]),
+        .target(
+            name: "AnalyticsSwift",
+            dependencies: [
+                .product(name: "AnalyticsImitation", package: "DocumentID"),
+                .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk")
             ],
             exclude: [
                 "../../Sources/FirestoreSwift/FirestoreEncoder/LICENSE",
