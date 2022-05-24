@@ -62,7 +62,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func create<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
+    public func create<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).setData(from: data, merge: true) { error in
@@ -78,7 +78,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func update<T>(before: T?, after: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
+    public func update<T>(before: T?, after: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).setData(from: after, merge: true) { error in
@@ -94,7 +94,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func update<T>(data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable, T : Identifiable {
+    public func update<T>(data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).setData(from: data, merge: true) { error in
