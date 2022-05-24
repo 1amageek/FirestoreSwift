@@ -65,7 +65,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     public func create<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
-                try document(reference.path).setData(from: data, merge: true) { error in
+                try document(reference.path).setData(from: data) { error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return
@@ -78,10 +78,10 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func update<T>(before: T?, after: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func update<T>(before: T?, after: T, merge: Bool = true, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
-                try document(reference.path).setData(from: after, merge: true) { error in
+                try document(reference.path).setData(from: after, merge: merge) { error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return
@@ -94,10 +94,10 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func update<T>(data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func update<T>(data: T, merge: Bool = true, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
-                try document(reference.path).setData(from: data, merge: true) { error in
+                try document(reference.path).setData(from: data, merge: merge) { error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return
