@@ -1,6 +1,7 @@
 import XCTest
 import FirebaseFirestore
 import DocumentID
+import FirestoreImitation
 @testable import FirestoreSwift
 
 final class FirestoreSwiftTests: XCTestCase {
@@ -61,4 +62,20 @@ final class FirestoreSwiftTests: XCTestCase {
             print(error)
         }
     }
+
+//    func testFieldValue() throws {
+//        FieldValueEncoder.shared.setDelegate(FieldValueEncoder.shared)
+//        struct Model: Identifiable, Encodable {
+//            @DocumentID var id: String
+//            var fieldValue: FieldValueEncoder.FieldValue
+//        }
+//        let data = Model(id: "id", fieldValue: .delete)
+//        do {
+//            let encoded = try? Firestore.Encoder().encode(data)
+//            print(encoded)
+//        } catch {
+//            print(error)
+//        }
+//
+//    }
 }
