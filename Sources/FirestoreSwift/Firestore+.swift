@@ -113,4 +113,8 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     public func delete(reference: FirestoreImitation.DocumentReference) async throws {
         try await document(reference.path).delete()
     }
+
+    public func writeBatch() -> FirestoreImitation.WriteBatch {
+        FirestoreImitation.WriteBatch(delegate: batch())
+    }
 }
