@@ -117,4 +117,12 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
     public func writeBatch() -> FirestoreImitation.WriteBatch {
         FirestoreImitation.WriteBatch(delegate: batch())
     }
+
+    public func runTransaction(update: @escaping (FirestoreImitation.Transaction, NSErrorPointer) -> Any?, completion: @escaping (Any?, Error?) -> Void) {
+        runTransaction { (transaction: FirebaseFirestore.Transaction, errorPointer: NSErrorPointer) in
+            return update(FirestoreImitation.Transaction(delegate: transaction), errorPointer)
+        } completion: { result, error in
+            completion(result, error)
+        }
+    }
 }
