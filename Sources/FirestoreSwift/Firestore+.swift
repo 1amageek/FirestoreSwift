@@ -21,6 +21,10 @@ extension Source {
 
 extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
 
+    public func updates<T>(_ reference: FirestoreImitation.DocumentReference, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable {
+        document(reference.path).updates(type: type, includeMetadataChanges: false)
+    }
+
     public func updates<T>(_ query: FirestoreImitation.Query, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
         collection(query.path)
             .setPredicates(query.predicates)
