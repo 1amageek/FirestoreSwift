@@ -78,22 +78,6 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func set<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
-            do {
-                try document(reference.path).setData(from: data, merge: true) { error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                        return
-                    }
-                    continuation.resume()
-                }
-            } catch {
-                continuation.resume(throwing: error)
-            }
-        }
-    }
-
     public func update<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
