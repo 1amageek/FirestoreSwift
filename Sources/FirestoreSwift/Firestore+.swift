@@ -62,42 +62,42 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func create<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
-            do {
-                try document(reference.path).setData(from: data) { error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                        return
-                    }
-                    continuation.resume()
-                }
-            } catch {
-                continuation.resume(throwing: error)
-            }
-        }
-    }
-
-    public func update<T>(before: T?, after: T, merge: Bool = true, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
-            do {
-                try document(reference.path).setData(from: after, merge: merge) { error in
-                    if let error = error {
-                        continuation.resume(throwing: error)
-                        return
-                    }
-                    continuation.resume()
-                }
-            } catch {
-                continuation.resume(throwing: error)
-            }
-        }
-    }
-
-    public func update<T>(data: T, merge: Bool = true, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func set<T>(_ data: T, merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).setData(from: data, merge: merge) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume()
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    public func set<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            do {
+                try document(reference.path).setData(from: data, merge: true) { error in
+                    if let error = error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    continuation.resume()
+                }
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+
+    public func update<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            do {
+                try document(reference.path).updateData(from: data) { error in
                     if let error = error {
                         continuation.resume(throwing: error)
                         return

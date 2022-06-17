@@ -19,7 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
-        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "9.0.0"))
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "9.1.0"))
     ],
     targets: [
         .target(

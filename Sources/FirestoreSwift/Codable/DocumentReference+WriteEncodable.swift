@@ -86,4 +86,12 @@ extension DocumentReference {
                                       completion: ((Error?) -> Void)? = nil) throws {
         setData(try encoder.encode(value), mergeFields: mergeFields, completion: completion)
     }
+
+
+    public func updateData<T: Encodable>(from value: T,
+                                      merge: Bool = true,
+                                      encoder: Firestore.Encoder = Firestore.Encoder(),
+                                      completion: ((Error?) -> Void)? = nil) throws {
+        updateData(try encoder.encode(value), completion: completion)
+    }
 }
