@@ -20,6 +20,29 @@ extension Source {
 }
 
 extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
+    
+    public func updates(_ reference: FirestoreImitation.DocumentReference) -> AsyncThrowingStream<FirestoreImitation.DocumentSnapshot?, Error>? {
+        AsyncThrowingStream { continuation in
+            let listener = document(reference.path).addSnapshotListener(includeMetadataChanges: false) { documentSnapshot, error in
+                if let error = error {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                guard let documentSnapshot = documentSnapshot else {
+                    continuation.yield(nil)
+                    return
+                }
+                let reference = FirestoreImitation.DocumentReference(documentSnapshot.reference.path)
+                let data = documentSnapshot.data(with: .estimate)
+                let metadata = FirestoreImitation.SnapshotMetadata(pendingWrites: documentSnapshot.metadata.hasPendingWrites, fromCache: documentSnapshot.metadata.isFromCache)
+                let snapshot = FirestoreImitation.DocumentSnapshot(reference: reference, data: data, metadata: metadata)
+                continuation.yield(snapshot)
+            }
+            continuation.onTermination = { @Sendable _ in
+                listener.remove()
+            }
+        }
+    }
 
     public func updates<T>(_ reference: FirestoreImitation.DocumentReference, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable {
         document(reference.path).updates(type: type, includeMetadataChanges: false)
