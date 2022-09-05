@@ -88,6 +88,18 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
             }
         }
     }
+    
+    public func set(_ data: [String: Any], merge: Bool, reference: FirestoreImitation.DocumentReference) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            document(reference.path).setData(data, merge: merge) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                continuation.resume()
+            }
+        }
+    }
 
     public func set<T>(_ data: T, merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
@@ -101,6 +113,18 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
                 }
             } catch {
                 continuation.resume(throwing: error)
+            }
+        }
+    }
+    
+    public func update(_ data: [String: Any], reference: FirestoreImitation.DocumentReference) async throws {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
+            document(reference.path).updateData(data) { error in
+                if let error = error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                continuation.resume()
             }
         }
     }
