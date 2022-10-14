@@ -1,4 +1,4 @@
-// swift-tools-version:5.5
+// swift-tools-version:5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -21,7 +21,7 @@ let package = Package(
             targets: ["StorageSwift"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:1amageek/DocumentID.git", .branch("main")),
+        .package(url: "git@github.com:1amageek/DocumentID.git", branch: "main"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "10.0.0"))
     ],
     targets: [
