@@ -71,8 +71,8 @@ extension FirebaseStorage.Storage: StorageImitation.Storage {
     ///   - ref: StorageReference that download file
     ///   - maxSize: File size limitation. default llimit 3MB
     /// - Returns: Storage file data
-    public func getData(ref: StorageImitation.StorageReference, maxSize: Int64 = 3 * 1024 * 1024) async throws -> Data? {
-        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data?, Error>) -> Void in
+    public func getData(ref: StorageImitation.StorageReference, maxSize: Int64 = 3 * 1024 * 1024) async throws -> Data {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Data, Error>) -> Void in
             reference().child(ref.fullPath).getData(maxSize: maxSize) { data, error in
                 if let data {
                     continuation.resume(returning: data)
