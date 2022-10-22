@@ -20,8 +20,8 @@ extension Source {
 }
 
 extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
-    
-    public func updates(_ reference: FirestoreImitation.DocumentReference) -> AsyncThrowingStream<FirestoreImitation.DocumentSnapshot?, Error>? {
+
+    public func updates(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool) -> AsyncThrowingStream<FirestoreImitation.DocumentSnapshot?, Error>? {
         AsyncThrowingStream { continuation in
             let listener = document(reference.path).addSnapshotListener(includeMetadataChanges: false) { documentSnapshot, error in
                 if let error = error {
@@ -44,20 +44,20 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func updates<T>(_ reference: FirestoreImitation.DocumentReference, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable {
-        document(reference.path).updates(type: type, includeMetadataChanges: false)
+    public func updates<T>(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable {
+        document(reference.path).updates(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
-    public func updates<T>(_ query: FirestoreImitation.Query, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
+    public func updates<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
         collection(query.path)
             .setPredicates(query.predicates)
-            .updates(type: type)
+            .updates(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
-    public func changes<T>(_ query: FirestoreImitation.Query, type: T.Type) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error>? where T : Decodable {
+    public func changes<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error>? where T : Decodable {
         collection(query.path)
             .setPredicates(query.predicates)
-            .changes(type: type)
+            .changes(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
     public func get<T>(_ query: FirestoreImitation.Query, source: Source, type: T.Type) async throws -> [T]? where T : Decodable {
