@@ -26,8 +26,13 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
             return try decoder.decode(type, from: jsonData)
         }
 
-        return try await withCheckedThrowingContinuation { continuation in
-            httpsCallable(callable.name)
+        return try await withCheckedThrowingContinuation { continuation in            
+            let httpsCallable: HTTPSCallable
+            switch callable.endpoint {
+                case .name(let name): httpsCallable = self.httpsCallable(name)
+                case .url(let url): httpsCallable = self.httpsCallable(url)
+            }
+            httpsCallable
                 .call(callable.data) { result, error in
                     if let error = error {
                         print(error)
