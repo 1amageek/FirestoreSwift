@@ -23,7 +23,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
 
     public func updates(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool) -> AsyncThrowingStream<FirestoreImitation.DocumentSnapshot?, Error>? {
         AsyncThrowingStream { continuation in
-            let listener = document(reference.path).addSnapshotListener(includeMetadataChanges: false) { documentSnapshot, error in
+            let listener = document(reference.path).addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {
                     continuation.finish(throwing: error)
                     return
