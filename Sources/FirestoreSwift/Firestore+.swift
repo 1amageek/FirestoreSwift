@@ -28,7 +28,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
                     continuation.finish(throwing: error)
                     return
                 }
-                guard let documentSnapshot = documentSnapshot else {
+                guard let documentSnapshot else {
                     continuation.yield(nil)
                     return
                 }
@@ -72,6 +72,26 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
                     print(#function, #line, error)
                     continuation.resume(returning: [])
                 }
+            }
+        }
+    }
+    
+    public func get(_ reference: FirestoreImitation.DocumentReference, source: Source = .default) async throws -> FirestoreImitation.DocumentSnapshot? {
+        try await withCheckedThrowingContinuation { continuation in
+            document(reference.path).getDocument(source: source.rawValue) { documentSnapshot, error in
+                if let error {
+                    continuation.resume(throwing: error)
+                    return
+                }
+                guard let documentSnapshot else {
+                    continuation.resume(returning: nil)
+                    return
+                }
+                let reference = FirestoreImitation.DocumentReference(documentSnapshot.reference.path)
+                let data = documentSnapshot.data(with: .estimate)
+                let metadata = FirestoreImitation.SnapshotMetadata(pendingWrites: documentSnapshot.metadata.hasPendingWrites, fromCache: documentSnapshot.metadata.isFromCache)
+                let snapshot = FirestoreImitation.DocumentSnapshot(reference: reference, data: data, metadata: metadata)
+                continuation.resume(returning: snapshot)
             }
         }
     }
