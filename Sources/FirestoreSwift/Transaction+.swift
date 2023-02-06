@@ -24,7 +24,7 @@ extension FirebaseFirestore.Transaction: FirestoreImitation.TransactionDelegate 
         deleteDocument(FirebaseFirestore.Firestore.firestore().document(document.path))
     }
 
-    public func getDocument<T>(_ document: FirestoreImitation.DocumentReference, type: T.Type) async throws -> T? where T : Decodable {
+    public func getDocument<T>(_ document: FirestoreImitation.DocumentReference, type: T.Type) throws -> T? where T : Decodable {
         let snapshot = try getDocument(FirebaseFirestore.Firestore.firestore().document(document.path))
         return try snapshot.data(as: type)
     }

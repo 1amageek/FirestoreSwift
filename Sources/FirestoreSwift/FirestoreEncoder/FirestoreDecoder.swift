@@ -644,25 +644,25 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
     }
     
     public mutating func nestedContainer<NestedKey>(keyedBy _: NestedKey
-                                                        .Type) throws -> KeyedDecodingContainer<NestedKey> {
-        decoder.codingPath.append(_FirestoreKey(index: currentIndex))
-        defer { self.decoder.codingPath.removeLast() }
-        
-        try expectNotAtEnd()
-        
-        let value = self.container[currentIndex]
-        try requireNotNSNull(value)
-        
-        guard let dictionary = value as? [String: Any] else {
-            throw DecodingError
-                ._typeMismatch(at: codingPath, expectation: [String: Any].self, reality: value)
+        .Type) throws -> KeyedDecodingContainer<NestedKey> {
+            decoder.codingPath.append(_FirestoreKey(index: currentIndex))
+            defer { self.decoder.codingPath.removeLast() }
+            
+            try expectNotAtEnd()
+            
+            let value = self.container[currentIndex]
+            try requireNotNSNull(value)
+            
+            guard let dictionary = value as? [String: Any] else {
+                throw DecodingError
+                    ._typeMismatch(at: codingPath, expectation: [String: Any].self, reality: value)
+            }
+            
+            currentIndex += 1
+            let container = _FirestoreKeyedDecodingContainer<NestedKey>(referencing: decoder,
+                                                                        wrapping: dictionary)
+            return KeyedDecodingContainer(container)
         }
-        
-        currentIndex += 1
-        let container = _FirestoreKeyedDecodingContainer<NestedKey>(referencing: decoder,
-                                                                    wrapping: dictionary)
-        return KeyedDecodingContainer(container)
-    }
     
     public mutating func nestedUnkeyedContainer() throws -> UnkeyedDecodingContainer {
         decoder.codingPath.append(_FirestoreKey(index: currentIndex))
@@ -697,9 +697,9 @@ private struct _FirestoreUnkeyedDecodingContainer: UnkeyedDecodingContainer {
             throw DecodingError
                 .valueNotFound(Any?.self,
                                DecodingError
-                                .Context(codingPath: decoder
-                                            .codingPath + [_FirestoreKey(index: currentIndex)],
-                                         debugDescription: "Unkeyed container is at end."))
+                    .Context(codingPath: decoder
+                        .codingPath + [_FirestoreKey(index: currentIndex)],
+                             debugDescription: "Unkeyed container is at end."))
         }
     }
     
@@ -735,8 +735,8 @@ extension _FirestoreDecoder: SingleValueDecodingContainer {
             throw DecodingError
                 .valueNotFound(type,
                                DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Expected \(type) but found null value instead."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Expected \(type) but found null value instead."))
         }
     }
     
@@ -842,15 +842,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let int = number.intValue
         guard NSNumber(value: int) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return int
@@ -861,15 +861,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let int8 = number.int8Value
         guard NSNumber(value: int8) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return int8
@@ -880,15 +880,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let int16 = number.int16Value
         guard NSNumber(value: int16) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return int16
@@ -899,15 +899,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let int32 = number.int32Value
         guard NSNumber(value: int32) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return int32
@@ -918,15 +918,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let int64 = number.int64Value
         guard NSNumber(value: int64) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return int64
@@ -937,15 +937,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let uint = number.uintValue
         guard NSNumber(value: uint) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return uint
@@ -956,15 +956,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let uint8 = number.uint8Value
         guard NSNumber(value: uint8) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return uint8
@@ -975,15 +975,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let uint16 = number.uint16Value
         guard NSNumber(value: uint16) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return uint16
@@ -994,15 +994,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let uint32 = number.uint32Value
         guard NSNumber(value: uint32) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return uint32
@@ -1013,15 +1013,15 @@ extension _FirestoreDecoder {
         
         guard let number = value as? NSNumber, number !== kCFBooleanTrue,
               number !== kCFBooleanFalse else {
-                  throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
-              }
+            throw DecodingError._typeMismatch(at: codingPath, expectation: type, reality: value)
+        }
         
         let uint64 = number.uint64Value
         guard NSNumber(value: uint64) == number else {
             throw DecodingError
                 .dataCorrupted(DecodingError
-                                .Context(codingPath: codingPath,
-                                         debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
+                    .Context(codingPath: codingPath,
+                             debugDescription: "Decoded number <\(number)> does not fit in \(type)."))
         }
         
         return uint64
@@ -1041,8 +1041,8 @@ extension _FirestoreDecoder {
             guard abs(double) <= Double(Float.greatestFiniteMagnitude) else {
                 throw DecodingError
                     .dataCorrupted(DecodingError
-                                    .Context(codingPath: codingPath,
-                                             debugDescription: "Decoded number \(number) does not fit in \(type)."))
+                        .Context(codingPath: codingPath,
+                                 debugDescription: "Decoded number \(number) does not fit in \(type)."))
             }
             
             return Float(double)
