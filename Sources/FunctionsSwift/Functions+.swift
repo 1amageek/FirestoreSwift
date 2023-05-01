@@ -49,10 +49,10 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
         }
     }
 
-    public func request<T>(url: URL) async throws -> T? where T : Decodable {
+    public func request<T>(url: URL, type: T.Type) async throws -> T? where T : Decodable {
         let (data, _) = try await URLSession(configuration: .default).data(from: url)
         let jsonObject = try JSONSerialization.jsonObject(with: data)
-        let decoded = try decode(data: jsonObject, type: T.self)
+        let decoded = try decode(data: jsonObject, type: type)
         return decoded
     }
 }
