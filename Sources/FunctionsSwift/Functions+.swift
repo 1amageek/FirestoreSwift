@@ -34,7 +34,6 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
             httpsCallable
                 .call(callable.data) { result, error in
                     if let error = error {
-                        print(error)
                         continuation.resume(throwing: error)
                         return
                     }
@@ -42,7 +41,6 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
                         let data = try self.decode(data: result!.data, type: T.self)
                         continuation.resume(returning: data)
                     } catch {
-                        print(error)
                         continuation.resume(throwing: error)
                     }
                 }
