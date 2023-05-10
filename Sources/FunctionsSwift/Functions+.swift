@@ -11,34 +11,13 @@ import FunctionsImitation
 
 extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
 
-    public static func iso8601() -> JSONDecoder {
-        let decoder = JSONDecoder()
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.timeZone = TimeZone.current
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ"
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        return decoder
-    }
-
-    public static func rfc822() -> JSONDecoder {
-        let decoder = JSONDecoder()
-        let dateFormatter = DateFormatter()
-        dateFormatter.calendar = Calendar(identifier: .gregorian)
-        dateFormatter.timeZone = TimeZone.current
-        dateFormatter.locale = Locale(identifier: "en_US_POSIX")
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        decoder.dateDecodingStrategy = .formatted(dateFormatter)
-        return decoder
-    }
 
     func decode<T>(data: Any, type: T.Type, decoder: JSONDecoder) throws -> T where T: Decodable {
         let jsonData = try JSONSerialization.data(withJSONObject: data, options: .fragmentsAllowed)
         return try decoder.decode(type, from: jsonData)
     }
 
-    public func call<T>(_ callable: FunctionsImitation.Callable<T>, decoder: JSONDecoder = FirebaseFunctions.Functions.rfc822()) async throws -> T? where T : Decodable {
+    public func call<T>(_ callable: FunctionsImitation.Callable<T>, decoder: JSONDecoder = .rfc822()) async throws -> T? where T : Decodable {
         return try await withCheckedThrowingContinuation { continuation in            
             let httpsCallable: HTTPSCallable
             switch callable.endpoint {
@@ -61,7 +40,7 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
         }
     }
 
-    public func request<T>(url: URL, type: T.Type, decoder: JSONDecoder = FirebaseFunctions.Functions.rfc822()) async throws -> T? where T : Decodable {
+    public func request<T>(url: URL, type: T.Type, decoder: JSONDecoder = .rfc822()) async throws -> T? where T : Decodable {
         let (data, _) = try await URLSession(configuration: .default).data(from: url)
         let jsonObject = try JSONSerialization.jsonObject(with: data)
         let decoded = try decode(data: jsonObject, type: type, decoder: decoder)
