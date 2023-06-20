@@ -21,7 +21,7 @@ let package = Package(
             targets: ["StorageSwift"]),
     ],
     dependencies: [
-        .package(url: "git@github.com:1amageek/DocumentID.git", branch: "main"),
+        .package(url: "https://github.com/1amageek/DocumentID.git", branch: "main"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", .upToNextMajor(from: "10.9.0"))
     ],
     targets: [
