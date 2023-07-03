@@ -48,6 +48,26 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         document(reference.path).updates(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
+    public func get(_ aggrigateQuery: FirestoreImitation.AggregateQuery) async throws -> FirestoreImitation.AggregateQuerySnapshot? {
+        try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<FirestoreImitation.AggregateQuerySnapshot?, Error>) -> Void in
+            collection(aggrigateQuery.query.path)
+                .setPredicates(aggrigateQuery.query.predicates)
+                .count
+                .getAggregation(source: .server) { aggregateQuerySnapshot, error in
+                    if let error {
+                        continuation.resume(throwing: error)
+                        return
+                    }
+                    guard let aggregateQuerySnapshot else {
+                        continuation.resume(returning: nil)
+                        return
+                    }
+                    let snapshot = FirestoreImitation.AggregateQuerySnapshot(query: aggrigateQuery, count: aggregateQuerySnapshot.count.intValue)
+                    continuation.resume(returning: snapshot)
+                }
+        }
+    }
+
     public func updates<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
         collection(query.path)
             .setPredicates(query.predicates)
