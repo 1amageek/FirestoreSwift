@@ -17,7 +17,7 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
         return try decoder.decode(type, from: jsonData)
     }
 
-    public func call<T>(_ callable: FunctionsImitation.Callable<T>, decoder: JSONDecoder = .rfc822()) async throws -> T? where T : Decodable {
+    public func call<T>(_ callable: FunctionsImitation.Callable<T>, decoder: JSONDecoder = .extendedDateTimeWithMillis()) async throws -> T? where T : Decodable {
         return try await withCheckedThrowingContinuation { continuation in            
             let httpsCallable: HTTPSCallable
             switch callable.endpoint {
@@ -40,7 +40,7 @@ extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
         }
     }
 
-    public func request<T>(url: URL, type: T.Type, decoder: JSONDecoder = .rfc822()) async throws -> T? where T : Decodable {
+    public func request<T>(url: URL, type: T.Type, decoder: JSONDecoder = .extendedDateTimeWithMillis()) async throws -> T? where T : Decodable {
         let (data, _) = try await URLSession(configuration: .default).data(from: url)
         let jsonObject = try JSONSerialization.jsonObject(with: data)
         let decoded = try decode(data: jsonObject, type: type, decoder: decoder)
