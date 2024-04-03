@@ -13,7 +13,7 @@ extension FirebaseFirestore.Query: Queryable {
 
     public typealias DataQuery = FirebaseFirestore.Query
 
-    public func setPredicates(_ predicates: [QueryPredicate]) -> FirebaseFirestore.Query {
+    public func setPredicates(_ predicates: [FirestoreImitation.QueryPredicate]) -> FirebaseFirestore.Query {
         var query = self
         predicates.forEach { predicate in
             switch predicate {
