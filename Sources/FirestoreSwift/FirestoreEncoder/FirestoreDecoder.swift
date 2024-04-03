@@ -17,7 +17,7 @@ import FirebaseFirestore
 import Foundation
 
 extension Firestore {
-    public struct Decoder {
+    public struct MyDecoder {
         fileprivate static let documentRefUserInfoKey =
         CodingUserInfoKey(rawValue: "DocumentRefUserInfoKey")
         
@@ -42,7 +42,7 @@ extension Firestore {
                                          in document: DocumentReference? = nil) throws -> T {
             let decoder = _FirestoreDecoder(referencing: container)
             if let doc = document {
-                decoder.userInfo[Firestore.Decoder.documentRefUserInfoKey!] = doc
+                decoder.userInfo[Firestore.MyDecoder.documentRefUserInfoKey!] = doc
             }
             
             guard let value = try decoder.unbox(container, as: T.self) else {
@@ -342,7 +342,7 @@ private struct _FirestoreKeyedDecodingContainer<K: CodingKey>: KeyedDecodingCont
                 return try type.init(from: value) as! T
             } else {
                 let docRef = decoder.userInfo[
-                    Firestore.Decoder.documentRefUserInfoKey!
+                    Firestore.MyDecoder.documentRefUserInfoKey!
                 ] as! DocumentReference
                 
                 if contains(key) {

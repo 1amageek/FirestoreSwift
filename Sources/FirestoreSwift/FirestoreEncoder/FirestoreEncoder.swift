@@ -15,10 +15,10 @@
 
 import FirebaseFirestore
 import Foundation
-import DocumentID
+import struct DocumentID.DocumentID
 
 extension Firestore {
-    public struct Encoder {
+    public struct MyEncoder {
         public init() {}
         /// Returns encoded data that Firestore API recognizes.
         ///
