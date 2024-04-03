@@ -15,7 +15,7 @@
  */
 
 import FirebaseFirestore
-import DocumentID
+import struct DocumentID.DocumentID
 
 
 /// A type that can initialize itself from a Firestore `DocumentReference`,
