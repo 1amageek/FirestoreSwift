@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 
 extension Query {
     
@@ -39,7 +39,7 @@ extension Query {
                 }
                 continuation.yield(querySnapshot!)
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -62,7 +62,7 @@ extension Query {
                     continuation.yield([])
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -85,7 +85,7 @@ extension Query {
                     continuation.yield(([], querySnapshot!))
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -125,7 +125,7 @@ extension Query {
                     continuation.finish(throwing: error)
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -165,7 +165,7 @@ extension Query {
                     continuation.finish(throwing: error)
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
