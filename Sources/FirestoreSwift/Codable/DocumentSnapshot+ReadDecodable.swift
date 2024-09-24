@@ -33,7 +33,7 @@ extension DocumentSnapshot {
     ///     not yet been set to their final value are returned from the snapshot.
     ///   - decoder: The decoder to use to convert the document. `nil` to use
     ///     default decoder.
-    public func data<T: Decodable>(as type: T.Type,
+    public func data<T: Decodable & Sendable>(as type: T.Type,
                                    with serverTimestampBehavior: ServerTimestampBehavior = .none,
                                    decoder: Firestore.Decoder? = nil) throws -> T? {
         let d = decoder ?? Firestore.Decoder()

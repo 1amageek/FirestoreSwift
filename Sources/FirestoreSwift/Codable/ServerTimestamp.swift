@@ -69,8 +69,8 @@ extension Timestamp: ServerTimestampWrappable {
 /// Then writing `CustomModel(ts: nil)` will tell server to fill `ts` with
 /// current timestamp.
 @propertyWrapper
-public struct ServerTimestamp<Value>: Codable
-where Value: ServerTimestampWrappable & Codable {
+public struct ServerTimestamp<Value>: Codable, Sendable
+where Value: ServerTimestampWrappable & Codable & Sendable {
     var value: Value?
     
     public init(wrappedValue value: Value?) {

@@ -9,7 +9,7 @@ import Foundation
 import FirebaseFirestore
 import FirestoreImitation
 
-extension FirebaseFirestore.Query: Queryable {
+extension FirebaseFirestore.Query: @retroactive Queryable, Sendable {
 
     public typealias DataQuery = FirebaseFirestore.Query
 

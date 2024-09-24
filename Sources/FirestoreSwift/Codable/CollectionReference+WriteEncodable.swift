@@ -31,7 +31,7 @@ extension CollectionReference {
     ///                 the client is offline, though local changes will be visible
     ///                 immediately.
     /// - Returns: A `DocumentReference` pointing to the newly created document.
-    public func addDocument<T: Encodable>(from value: T,
+    public func addDocument<T: Encodable & Sendable>(from value: T,
                                           encoder: Firestore.MyEncoder = Firestore.MyEncoder(),
                                           completion: ((Error?) -> Void)? = nil) throws
     -> DocumentReference {

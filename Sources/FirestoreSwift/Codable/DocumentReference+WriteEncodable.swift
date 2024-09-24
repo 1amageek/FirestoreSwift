@@ -31,7 +31,7 @@ extension DocumentReference {
     ///                 written to the server. This block will not be called while
     ///                 the client is offline, though local changes will be visible
     ///                 immediately.
-    public func setData<T: Encodable>(from value: T,
+    public func setData<T: Encodable & Sendable>(from value: T,
                                       encoder: Firestore.Encoder = Firestore.Encoder(),
                                       completion: ((Error?) -> Void)? = nil) throws {
         setData(try encoder.encode(value), completion: completion)
@@ -53,7 +53,7 @@ extension DocumentReference {
     ///                 written to the server. This block will not be called while
     ///                 the client is offline, though local changes will be visible
     ///                 immediately.
-    public func setData<T: Encodable>(from value: T,
+    public func setData<T: Encodable & Sendable>(from value: T,
                                       merge: Bool,
                                       encoder: Firestore.Encoder = Firestore.Encoder(),
                                       completion: ((Error?) -> Void)? = nil) throws {
@@ -80,7 +80,7 @@ extension DocumentReference {
     ///                 written to the server. This block will not be called while
     ///                 the client is offline, though local changes will be visible
     ///                 immediately.
-    public func setData<T: Encodable>(from value: T,
+    public func setData<T: Encodable & Sendable>(from value: T,
                                       mergeFields: [Any],
                                       encoder: Firestore.Encoder = Firestore.Encoder(),
                                       completion: ((Error?) -> Void)? = nil) throws {
@@ -88,7 +88,7 @@ extension DocumentReference {
     }
 
 
-    public func updateData<T: Encodable>(from value: T,
+    public func updateData<T: Encodable & Sendable>(from value: T,
                                       merge: Bool = true,
                                       encoder: Firestore.Encoder = Firestore.Encoder(),
                                       completion: ((Error?) -> Void)? = nil) throws {

@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 extension DocumentReference {
 
-    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> T? where T: Decodable {
+    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> T? where T: Decodable & Sendable {
         try await withCheckedThrowingContinuation { continuation in
             self.getDocument(source: source) { documentSnapshot, error in
                 do {
@@ -38,7 +38,7 @@ extension DocumentReference {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<T?, Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<T?, Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {
@@ -59,7 +59,7 @@ extension DocumentReference {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<(T?, DocumentSnapshot?), Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<(T?, DocumentSnapshot?), Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { documentSnapshot, error in
                 if let error = error {

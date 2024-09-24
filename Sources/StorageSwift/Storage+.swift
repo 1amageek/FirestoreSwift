@@ -13,19 +13,19 @@ public protocol FileTransfer {
     var data: Data { get }
 }
 
-public enum FileOperationType {
+public enum FileOperationType: Sendable {
     case add
     case delete
     case nochange
 }
 
-public struct FileOperation<T: FileTransfer> {
+public struct FileOperation<T: FileTransfer & Sendable>: Sendable {
 
     public typealias StorageFile = T
 
     public typealias Result = (FileOperationType, T)
 
-    public typealias Operation = (T) async throws -> Self.Result
+    public typealias Operation = @Sendable (T) async throws -> Self.Result
 
     public var file: T
 
@@ -44,7 +44,7 @@ public struct FileOperation<T: FileTransfer> {
     }
 }
 
-extension FirebaseStorage.Storage: StorageImitation.Storage {
+extension FirebaseStorage.Storage: StorageImitation.Storage, @retroactive @unchecked Sendable {
 
     public func putData(ref: StorageImitation.StorageReference, data: Data, metadata: StorageImitation.StorageMetadata) async throws {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
@@ -80,7 +80,7 @@ extension FirebaseStorage.Storage: StorageImitation.Storage {
                     print(error)
                     continuation.resume(throwing: error)
                 } else {
-                    continuation.resume(throwing: StorageError.internalError("Internal failure in getResultCallback"))
+                    continuation.resume(throwing: StorageError.internalError(message: "Internal failure in getResultCallback"))
                 }
             }
         }

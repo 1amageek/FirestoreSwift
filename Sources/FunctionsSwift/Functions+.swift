@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import FirebaseFunctions
+@preconcurrency import FirebaseFunctions
 import FunctionsImitation
 
-extension FirebaseFunctions.Functions: FunctionsImitation.Functions {
+extension FirebaseFunctions.Functions: FunctionsImitation.Functions, @retroactive @unchecked Sendable {
 
 
     func decode<T>(data: Any, type: T.Type, decoder: JSONDecoder) throws -> T where T: Decodable {

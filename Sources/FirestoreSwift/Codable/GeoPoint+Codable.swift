@@ -59,4 +59,4 @@ extension CodableGeoPoint {
 }
 
 /** Extends GeoPoint to conform to Codable. */
-extension GeoPoint: CodableGeoPoint {}
+extension GeoPoint: CodableGeoPoint, Sendable {}

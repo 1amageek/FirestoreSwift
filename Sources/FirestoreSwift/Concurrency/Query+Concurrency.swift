@@ -10,7 +10,7 @@ import FirebaseFirestore
 
 extension Query {
     
-    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> [T]? where T: Decodable {
+    public func get<T>(source: FirestoreSource = .default, type: T.Type) async throws -> [T]? where T: Decodable & Sendable {
         try await withCheckedThrowingContinuation { continuation in
             self.getDocuments(source: source) { querySnapshot, error in
                 if let error = error {
@@ -45,7 +45,7 @@ extension Query {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<[T], Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
@@ -68,7 +68,7 @@ extension Query {
         }
     }
 
-    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<([T], QuerySnapshot), Error> where T: Decodable {
+    public func updates<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<([T], QuerySnapshot), Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
@@ -91,7 +91,7 @@ extension Query {
         }
     }
 
-    public func changes<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error> where T: Decodable {
+    public func changes<T>(type: T.Type, includeMetadataChanges: Bool = true) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {
@@ -131,7 +131,7 @@ extension Query {
         }
     }
 
-    public func changes<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<((added: [T], modified: [T], removed: [T]), QuerySnapshot), Error> where T: Decodable {
+    public func changes<T>(type: T.Type, includeMetadataChanges: Bool = false) -> AsyncThrowingStream<((added: [T], modified: [T], removed: [T]), QuerySnapshot), Error> where T: Decodable & Sendable {
         AsyncThrowingStream { continuation in
             let listener = self.addSnapshotListener(includeMetadataChanges: includeMetadataChanges) { querySnapshot, error in
                 if let error = error {

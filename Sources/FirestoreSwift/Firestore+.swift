@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 import FirestoreImitation
 
 extension Source {
@@ -19,7 +19,7 @@ extension Source {
     }
 }
 
-extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
+extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore, @unchecked @retroactive Sendable {
 
     public func updates(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool) -> AsyncThrowingStream<FirestoreImitation.DocumentSnapshot?, Error>? {
         AsyncThrowingStream { continuation in
@@ -44,7 +44,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func updates<T>(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable {
+    public func updates<T>(_ reference: FirestoreImitation.DocumentReference, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<T?, Error>? where T : Decodable & Sendable {
         document(reference.path).updates(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
@@ -68,19 +68,19 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func updates<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable {
+    public func updates<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<[T], Error>? where T : Decodable & Sendable {
         collection(query.path)
             .setPredicates(query.predicates)
             .updates(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
-    public func changes<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error>? where T : Decodable {
+    public func changes<T>(_ query: FirestoreImitation.Query, includeMetadataChanges: Bool, type: T.Type) -> AsyncThrowingStream<(added: [T], modified: [T], removed: [T]), Error>? where T : Decodable & Sendable {
         collection(query.path)
             .setPredicates(query.predicates)
             .changes(type: type, includeMetadataChanges: includeMetadataChanges)
     }
 
-    public func get<T>(_ query: FirestoreImitation.Query, source: Source, type: T.Type) async throws -> [T]? where T : Decodable {
+    public func get<T>(_ query: FirestoreImitation.Query, source: Source, type: T.Type) async throws -> [T]? where T : Decodable & Sendable {
         try await withCheckedThrowingContinuation { continuation in
             collection(query.path).getDocuments(source: source.rawValue) { querySnapshot, error in
                 do {
@@ -116,7 +116,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func get<T>(_ reference: FirestoreImitation.DocumentReference, source: Source, type: T.Type) async throws -> T? where T : Decodable {
+    public func get<T>(_ reference: FirestoreImitation.DocumentReference, source: Source, type: T.Type) async throws -> T? where T : Decodable & Sendable {
         try await withCheckedThrowingContinuation { continuation in
             document(reference.path).getDocument(source: source.rawValue) { snapshot, error in
                 do {
@@ -141,7 +141,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func set<T>(_ data: T, merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func set<T>(_ data: T, merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable & Sendable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).setData(from: data, merge: merge) { error in
@@ -157,7 +157,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
     
-    public func set<T>(_ data: T, extensionData: [String: Any], merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func set<T>(_ data: T, extensionData: [String: Any], merge: Bool, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable & Sendable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 let encodeData = try Firestore.Encoder().encode(data)
@@ -187,7 +187,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
 
-    public func update<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func update<T>(_ data: T, reference: FirestoreImitation.DocumentReference) async throws where T : Encodable & Sendable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 try document(reference.path).updateData(from: data) { error in
@@ -203,7 +203,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore {
         }
     }
     
-    public func update<T>(_ data: T, extensionData: [String: Any], reference: FirestoreImitation.DocumentReference) async throws where T : Encodable {
+    public func update<T>(_ data: T, extensionData: [String: Any], reference: FirestoreImitation.DocumentReference) async throws where T : Encodable & Sendable {
         try await withCheckedThrowingContinuation { (continuation: CheckedContinuation<Void, Error>) -> Void in
             do {
                 let encodeData = try Firestore.Encoder().encode(data)
