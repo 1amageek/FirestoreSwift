@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import FirebaseFirestore
+@preconcurrency import FirebaseFirestore
 
 extension DocumentReference {
 
@@ -32,7 +32,7 @@ extension DocumentReference {
                 }
                 continuation.yield(documentSnapshot)
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -53,7 +53,7 @@ extension DocumentReference {
                     continuation.yield(nil)
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
@@ -74,7 +74,7 @@ extension DocumentReference {
                     continuation.yield((nil, nil))
                 }
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }

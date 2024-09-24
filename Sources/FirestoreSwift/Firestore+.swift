@@ -38,7 +38,7 @@ extension FirebaseFirestore.Firestore: FirestoreImitation.Firestore, @unchecked 
                 let snapshot = FirestoreImitation.DocumentSnapshot(reference: reference, data: data, metadata: metadata)
                 continuation.yield(snapshot)
             }
-            continuation.onTermination = { @Sendable _ in
+            continuation.onTermination = { _ in
                 listener.remove()
             }
         }
