@@ -56,8 +56,8 @@ extension WriteBatch {
     public func setData<T: Encodable & Sendable>(from value: T,
                                                  forDocument doc: DocumentReference,
                                                  merge: Bool,
-                                                 encoder: Firestore.Encoder = Firestore
-        .Encoder()) throws -> WriteBatch {
+                                                 encoder: Firestore.MyEncoder = Firestore
+        .MyEncoder()) throws -> WriteBatch {
             setData(try encoder.encode(value), forDocument: doc, merge: merge)
             return self
         }
@@ -84,8 +84,8 @@ extension WriteBatch {
     public func setData<T: Encodable & Sendable>(from value: T,
                                                  forDocument doc: DocumentReference,
                                                  mergeFields: [Any],
-                                                 encoder: Firestore.Encoder = Firestore
-        .Encoder()) throws -> WriteBatch {
+                                                 encoder: Firestore.MyEncoder = Firestore
+        .MyEncoder()) throws -> WriteBatch {
             setData(try encoder.encode(value), forDocument: doc, mergeFields: mergeFields)
             return self
         }
