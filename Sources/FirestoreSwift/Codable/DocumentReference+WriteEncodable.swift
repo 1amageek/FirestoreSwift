@@ -32,7 +32,7 @@ extension DocumentReference {
     ///                 the client is offline, though local changes will be visible
     ///                 immediately.
     public func setData<T: Encodable & Sendable>(from value: T,
-                                      encoder: Firestore.Encoder = Firestore.Encoder(),
+                                      encoder: Firestore.MyEncoder = Firestore.MyEncoder(),
                                       completion: ((Error?) -> Void)? = nil) throws {
         setData(try encoder.encode(value), completion: completion)
     }
